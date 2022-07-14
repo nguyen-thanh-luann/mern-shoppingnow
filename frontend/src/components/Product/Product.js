@@ -8,11 +8,7 @@ export default function Product(props) {
   return (
     <div className='card' key={product.slug}>
       <Link to={`/product/${product.slug}`}>
-        <img
-          src={require('../../assets/img/n1.jpg')}
-          alt='productimage'
-          className='card-img-top'
-        />
+        <img src={product.image} alt='productimage' className='card-img-top' />
       </Link>
       <div className='card-body'>
         <h5 className='card-title'>{product.name}</h5>
