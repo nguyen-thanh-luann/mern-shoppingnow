@@ -5,6 +5,9 @@ import { Helmet } from 'react-helmet-async'
 
 import './ProductDetail.scss'
 import Rating from '../rating/Rating'
+import Loading from '../loading/Loading'
+import MessageBox from '../messageBox/MessageBox'
+import { getError } from '../../utilities'
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -36,7 +39,7 @@ export default function ProductDetail() {
         const result = await axios.get(`/api/products/slug/${slug}`)
         dispatch({ type: 'FETCH_SUCCESS', payload: result.data })
       } catch (error) {
-        dispatch({ type: 'FETCH_FAIL', payload: error.message })
+        dispatch({ type: 'FETCH_FAIL', payload: getError(error) })
       }
     }
 
@@ -46,9 +49,9 @@ export default function ProductDetail() {
   return (
     <div>
       {loading ? (
-        <div>loading...</div>
+        <Loading />
       ) : error ? (
-        <div>{error}</div>
+        <MessageBox message={error} />
       ) : (
         <div className='container product-detail'>
           <div className='row my-2'>

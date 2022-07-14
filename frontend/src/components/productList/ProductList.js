@@ -3,6 +3,8 @@ import axios from 'axios'
 import logger from 'use-reducer-logger'
 
 import Product from '../Product/Product'
+import Loading from '../loading/Loading'
+import MessageBox from '../messageBox/MessageBox'
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -41,9 +43,9 @@ export default function ProductList() {
     <div className='container'>
       <div className='product-list row'>
         {loading ? (
-          <div>Loading...</div>
+          <Loading />
         ) : error ? (
-          <div>{error}</div>
+          <MessageBox message={error} />
         ) : (
           products.map((pro) => (
             <div
