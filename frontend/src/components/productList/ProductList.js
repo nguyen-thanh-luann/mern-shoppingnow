@@ -1,9 +1,8 @@
 import React, { useEffect, useReducer, useState } from 'react'
-import { Link } from 'react-router-dom'
 import axios from 'axios'
 import logger from 'use-reducer-logger'
 
-import './ProductList.scss'
+import Product from '../Product/Product'
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -47,19 +46,12 @@ export default function ProductList() {
           <div>{error}</div>
         ) : (
           products.map((pro) => (
-            <Link
-              to={`/product/${pro.slug}`}
-              className='product col col-3'
+            <div
               key={pro.slug}
+              className='product col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-5'
             >
-              <img
-                src={require('../../assets/img/n1.jpg')}
-                alt='productimage'
-                className='w-100'
-              />
-              <h5 className='product-name'>{pro.name}</h5>
-              <p>{pro.price}</p>
-            </Link>
+              <Product product={pro} />
+            </div>
           ))
         )}
       </div>
