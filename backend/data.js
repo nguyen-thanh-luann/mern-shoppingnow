@@ -4,9 +4,10 @@ const data = {
       name: 'Nike Slim shirt',
       slug: 'nike-slim-shirt',
       category: 'Shirts',
-      image: '../../assets/img/n1.jpg', // 679px × 829px
+      image:
+        'https://res.cloudinary.com/dtgze0gxj/image/upload/v1656162686/test/y8hzxn8hl6qigbanwrjk.webp', // 679px × 829px
       price: 120,
-      countInStock: 10,
+      countInStock: 0,
       brand: 'Nike',
       rating: 4.5,
       numReviews: 10,
@@ -16,7 +17,8 @@ const data = {
       name: 'Adidas Fit Shirt',
       slug: 'adidas-fit-shirt',
       category: 'Shirts',
-      image: '../../assets/img/n1.jpg',
+      image:
+        'https://res.cloudinary.com/dtgze0gxj/image/upload/v1655476780/test/ovpxlh7kdlowqvei28sy.webp',
       price: 250,
       countInStock: 20,
       brand: 'Adidas',
@@ -28,7 +30,8 @@ const data = {
       name: 'Nike Slim Pant',
       slug: 'nike-slim-pant',
       category: 'Pants',
-      image: '../../assets/img/n1.jpg',
+      image:
+        'https://res.cloudinary.com/dtgze0gxj/image/upload/v1655469699/test/z6g4vxxi35xd4ga59qbw.webp',
       price: 25,
       countInStock: 15,
       brand: 'Nike',
@@ -40,7 +43,8 @@ const data = {
       name: 'Adidas Fit Pant',
       slug: 'adidas-fit-pant',
       category: 'Pants',
-      image: '../../assets/img/n1.jpg',
+      image:
+        'https://res.cloudinary.com/dtgze0gxj/image/upload/v1656162773/test/y4a65lrtngce5at6gmhq.jpg',
       price: 65,
       countInStock: 5,
       brand: 'Puma',
