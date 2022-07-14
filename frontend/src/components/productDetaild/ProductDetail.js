@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react'
+import React, { useEffect, useReducer, useContext } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import { Helmet } from 'react-helmet-async'
@@ -8,6 +8,7 @@ import Rating from '../rating/Rating'
 import Loading from '../loading/Loading'
 import MessageBox from '../messageBox/MessageBox'
 import { getError } from '../../utilities'
+import { Store } from '../../Store'
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -46,6 +47,23 @@ export default function ProductDetail() {
     fetchData()
   }, [slug])
 
+  const { state, dispatch: ctxDispatch } = useContext(Store)
+  const { cart } = state
+
+  const addToCartHandler = async () => {
+    const existItem = cart.cartItems.find((x) => x._id === product._id)
+    const quantity = existItem ? existItem.quantity + 1 : 1
+    const { data } = await axios.get(`/api/products/${product._id}`)
+    if (data.countInStock < quantity) {
+      window.alert('Sorry. Product is out of stock')
+      return
+    }
+    ctxDispatch({
+      type: 'CART_ADD_ITEM',
+      payload: { ...product, quantity },
+    })
+  }
+
   return (
     <div>
       {loading ? (
@@ -78,7 +96,12 @@ export default function ProductDetail() {
               </div>
               <div>
                 {product.countInStock > 0 ? (
-                  <button className='btn btn-success mt-4'>Add to card</button>
+                  <button
+                    className='btn btn-success mt-4'
+                    onClick={addToCartHandler}
+                  >
+                    Add to card
+                  </button>
                 ) : (
                   <button className='btn btn-danger mt-4' disabled>
                     Add to card

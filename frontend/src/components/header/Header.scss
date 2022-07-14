@@ -1,6 +1,13 @@
 .header {
   background-color: #ccc;
   padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 1;
   .header-title {
     text-decoration: none;
     color: #000;
