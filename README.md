@@ -5,24 +5,27 @@
 ### How to run?
 
 1. Clone my repo
-   $ git clone https://github.com/nguyen-thanh-luann/mern-shoppingnow.git
-   $ cd mern-shoppingnow
 
-2.Create .env File
+   - $ git clone https://github.com/nguyen-thanh-luann/mern-shoppingnow.git
+   - $ cd mern-shoppingnow
 
-- In backend folder create file name .env:
-  MONGODB_URI=<your MONGODB_URL>
+2. Create .env File
 
-3.Run backend
-$ cd backend
-$ npm i
-$ cd npm start
+   - In backend folder create file name .env:
+   - MONGODB_URI=<your MONGODB_URL>
 
-4.Run frontend
-in new terminal:
+3. Run backend
 
-$ cd frontend
-$ npm i
-$ cd npm start
+   - $ cd backend
+   - $ npm i
+   - $ cd npm start
+
+4. Run frontend
+
+   - in new terminal:
+
+   - $ cd frontend
+   - $ npm i
+   - $ cd npm start
 
 5. Run http://localhost:5000/api/seed for Seed Users and Products
