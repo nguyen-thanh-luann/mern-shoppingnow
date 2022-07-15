@@ -12,7 +12,7 @@
 2. Create .env File
 
    - In backend folder create file name .env:
-   - MONGODB_URI=<your MONGODB_URL>
+   - MONGODB_URI= your MONGODB_URL
 
 3. Run backend
 
