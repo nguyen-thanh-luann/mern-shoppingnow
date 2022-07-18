@@ -1,7 +1,7 @@
 {
   "name": "shoppingnow",
   "version": "1.0.0",
-  "description": "1. Clone my repo",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "build": "cd backend && npm install && cd ../frontend && npm install && npm run build",
