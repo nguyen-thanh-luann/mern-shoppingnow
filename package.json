@@ -1,13 +1,13 @@
 {
   "name": "shoppingnow",
   "version": "1.0.0",
-  "description": "",
+  "description": "1. Clone my repo",
   "engines": {
     "node": "16.15.1"
   },
   "main": "index.js",
   "scripts": {
-    "build": "cd backend && npm install && cd ../frontend && npm install && npm run build",
+    "build": "cd backend && npm install && cd ../frontend && npm install && npm run build --force",
     "start": "node backend/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
