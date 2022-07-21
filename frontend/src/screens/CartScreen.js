@@ -46,7 +46,10 @@ export default function CartScreen() {
         <Col md={8}>
           {cartItems.length === 0 ? (
             <MessageBox>
-              Cart is empty. <Link to='/'>Go Shopping</Link>
+              Cart is empty.{' '}
+              <Link to='/' className='text-success fw-bold'>
+                Go Shopping
+              </Link>
             </MessageBox>
           ) : (
             <ListGroup>
@@ -59,7 +62,12 @@ export default function CartScreen() {
                         alt={item.name}
                         className='img-fluid rounded img-thumbnail'
                       ></img>{' '}
-                      <Link to={`/product/${item.slug}`}>{item.name}</Link>
+                      <Link
+                        to={`/product/${item.slug}`}
+                        className='fw-bold text-success text-decoration-none'
+                      >
+                        {item.name}
+                      </Link>
                     </Col>
                     <Col md={3}>
                       <Button
@@ -88,7 +96,7 @@ export default function CartScreen() {
                         onClick={() => removeItemHandler(item)}
                         variant='light'
                       >
-                        <i className='fas fa-trash'></i>
+                        <i className='fas fa-trash text-danger'></i>
                       </Button>
                     </Col>
                   </Row>

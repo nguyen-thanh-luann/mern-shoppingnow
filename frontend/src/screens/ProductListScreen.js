@@ -1,9 +1,7 @@
-import React, { useContext, useEffect, useReducer } from 'react'
+import React, { useContext, useEffect, useReducer, useState } from 'react'
 import axios from 'axios'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Button from 'react-bootstrap/Button'
+import { Col, Row, Button, Modal, Form } from 'react-bootstrap'
 import { toast } from 'react-toastify'
 import { Store } from '../Store'
 import LoadingBox from '../components/LoadingBox'
@@ -53,6 +51,36 @@ const reducer = (state, action) => {
 }
 
 export default function ProductListScreen() {
+  const [showAddProModal, setShowAddProModal] = useState(false)
+  const handleCloseAddProModal = () => setShowAddProModal(false)
+  const handleShowAddProModal = () => setShowAddProModal(true)
+
+  const [productName, setProductName] = useState('')
+  const [productPrice, setProductPrice] = useState(0)
+  const [productCategory, setProductCategory] = useState('')
+  const [productBrand, setProductBrand] = useState('')
+  const [productStock, setProductStock] = useState(0)
+  const [productDescr, setProductDescr] = useState('')
+
+  const [imageSelected, setImageSelected] = useState()
+  const [imageSelectedUrl, setImageSelectedUrl] = useState('')
+
+  const uploadImage = () => {
+    const formData = new FormData()
+    formData.append('file', imageSelected)
+    formData.append('upload_preset', 'clothes')
+
+    axios
+      .post('https://api.cloudinary.com/v1_1/imthanhluan/upload', formData)
+      .then((res) => {
+        setImageSelectedUrl(res.data.url)
+      })
+  }
+
+  useEffect(() => {
+    uploadImage()
+  }, [imageSelected])
+
   const [
     {
       loading,
@@ -99,16 +127,26 @@ export default function ProductListScreen() {
     if (window.confirm('Are you sure to create?')) {
       try {
         dispatch({ type: 'CREATE_REQUEST' })
-        const { data } = await axios.post(
-          '/api/products',
-          {},
-          {
-            headers: { Authorization: `Bearer ${userInfo.token}` },
-          }
-        )
+        const newPro = {
+          name: productName,
+          slug: 'sample-name-' + Date.now(),
+          category: productCategory,
+          image: imageSelectedUrl,
+          price: productPrice,
+          countInStock: productStock,
+          brand: productBrand,
+          description: productDescr,
+          rating: 0,
+          numReviews: 0,
+        }
+
+        await axios.post('/api/products', newPro, {
+          headers: { Authorization: `Bearer ${userInfo.token}` },
+        })
+
         toast.success('product created successfully')
+        handleCloseAddProModal()
         dispatch({ type: 'CREATE_SUCCESS' })
-        navigate(`/admin/product/${data.product._id}`)
       } catch (err) {
         toast.error(getError(error))
         dispatch({
@@ -136,19 +174,100 @@ export default function ProductListScreen() {
   }
 
   return (
-    <div style={{ 'margin-top': '70px' }}>
+    <div style={{ marginTop: '70px' }}>
       <Row>
         <Col>
           <h1>Products</h1>
         </Col>
         <Col className='col text-end'>
           <div>
-            <Button type='button' onClick={createHandler}>
+            <Button type='button' onClick={handleShowAddProModal}>
               Create Product
             </Button>
           </div>
         </Col>
       </Row>
+
+      <Modal show={showAddProModal} onHide={handleCloseAddProModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Add new product</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className='mt-2' controlId='productName'>
+              <Form.Label>Product name</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Enter product name...'
+                onChange={(e) => setProductName(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className='mt-2' controlId='productPrice'>
+              <Form.Label>Product price</Form.Label>
+              <Form.Control
+                type='number'
+                placeholder='$'
+                onChange={(e) => setProductPrice(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className='mt-2' controlId='productCate'>
+              <Form.Label>Product category</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Enter product category'
+                onChange={(e) => setProductCategory(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className='mt-2' controlId='productBrand'>
+              <Form.Label>Product brand</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Enter product brand'
+                onChange={(e) => setProductBrand(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className='mt-2' controlId='productStock'>
+              <Form.Label>Stock</Form.Label>
+              <Form.Control
+                type='number'
+                placeholder='Enter stock'
+                onChange={(e) => setProductStock(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className='mt-2' controlId='productStock'>
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                as='textarea'
+                onChange={(e) => setProductDescr(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className='mt-2' controlId='productImage'>
+              <Form.Label>Product photo</Form.Label>
+              <Form.Control
+                type='file'
+                onChange={(e) => setImageSelected(e.target.files[0])}
+              />
+            </Form.Group>
+            {imageSelected && (
+              <div className='w-100 text-center'>
+                <img
+                  src={imageSelectedUrl}
+                  alt='productimg'
+                  className='mt-2 w-25 img-fluid'
+                />
+              </div>
+            )}
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant='secondary' onClick={handleCloseAddProModal}>
+            Close
+          </Button>
+          <Button variant='success' onClick={createHandler}>
+            Add
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       {loadingCreate && <LoadingBox></LoadingBox>}
       {loadingDelete && <LoadingBox></LoadingBox>}
