@@ -105,7 +105,7 @@ export default function ProductListScreen() {
   const { state } = useContext(Store)
   const { userInfo } = state
 
-  useEffect(() => {
+  const loadProductList = () => {
     const fetchData = async () => {
       try {
         const { data } = await axios.get(`/api/products/admin?page=${page} `, {
@@ -121,6 +121,10 @@ export default function ProductListScreen() {
     } else {
       fetchData()
     }
+  }
+
+  useEffect(() => {
+    loadProductList()
   }, [page, userInfo, successDelete])
 
   const createHandler = async () => {
@@ -147,6 +151,8 @@ export default function ProductListScreen() {
         toast.success('product created successfully')
         handleCloseAddProModal()
         dispatch({ type: 'CREATE_SUCCESS' })
+        navigate('/admin/products/')
+        loadProductList()
       } catch (err) {
         toast.error(getError(error))
         dispatch({
@@ -181,7 +187,12 @@ export default function ProductListScreen() {
         </Col>
         <Col className='col text-end'>
           <div>
-            <Button type='button' onClick={handleShowAddProModal}>
+            <Button
+              variant='success'
+              type='button'
+              onClick={handleShowAddProModal}
+            >
+              <i className='fa-solid fa-plus me-2'></i>
               Create Product
             </Button>
           </div>
@@ -195,54 +206,54 @@ export default function ProductListScreen() {
         <Modal.Body>
           <Form>
             <Form.Group className='mt-2' controlId='productName'>
-              <Form.Label>Product name</Form.Label>
+              <Form.Label className='fw-bold'>Product name</Form.Label>
               <Form.Control
                 type='text'
-                placeholder='Enter product name...'
+                placeholder='T-shirt'
                 onChange={(e) => setProductName(e.target.value)}
               />
             </Form.Group>
             <Form.Group className='mt-2' controlId='productPrice'>
-              <Form.Label>Product price</Form.Label>
+              <Form.Label className='fw-bold'>Product price</Form.Label>
               <Form.Control
                 type='number'
-                placeholder='$'
+                placeholder='$123'
                 onChange={(e) => setProductPrice(e.target.value)}
               />
             </Form.Group>
             <Form.Group className='mt-2' controlId='productCate'>
-              <Form.Label>Product category</Form.Label>
+              <Form.Label className='fw-bold'>Product category</Form.Label>
               <Form.Control
                 type='text'
-                placeholder='Enter product category'
+                placeholder='Shirts'
                 onChange={(e) => setProductCategory(e.target.value)}
               />
             </Form.Group>
             <Form.Group className='mt-2' controlId='productBrand'>
-              <Form.Label>Product brand</Form.Label>
+              <Form.Label className='fw-bold'>Product brand</Form.Label>
               <Form.Control
                 type='text'
-                placeholder='Enter product brand'
+                placeholder='Adidas'
                 onChange={(e) => setProductBrand(e.target.value)}
               />
             </Form.Group>
             <Form.Group className='mt-2' controlId='productStock'>
-              <Form.Label>Stock</Form.Label>
+              <Form.Label className='fw-bold'>Stock</Form.Label>
               <Form.Control
                 type='number'
-                placeholder='Enter stock'
+                placeholder='12'
                 onChange={(e) => setProductStock(e.target.value)}
               />
             </Form.Group>
             <Form.Group className='mt-2' controlId='productStock'>
-              <Form.Label>Description</Form.Label>
+              <Form.Label className='fw-bold'>Description</Form.Label>
               <Form.Control
                 as='textarea'
                 onChange={(e) => setProductDescr(e.target.value)}
               />
             </Form.Group>
             <Form.Group className='mt-2' controlId='productImage'>
-              <Form.Label>Product photo</Form.Label>
+              <Form.Label className='fw-bold'>Product photo</Form.Label>
               <Form.Control
                 type='file'
                 onChange={(e) => setImageSelected(e.target.files[0])}
@@ -258,18 +269,20 @@ export default function ProductListScreen() {
               </div>
             )}
           </Form>
+          {loadingCreate && <LoadingBox></LoadingBox>}
         </Modal.Body>
         <Modal.Footer>
           <Button variant='secondary' onClick={handleCloseAddProModal}>
+            <i className='fa-solid fa-xmark me-2'></i>
             Close
           </Button>
           <Button variant='success' onClick={createHandler}>
+            <i className='fa-solid fa-plus me-2'></i>
             Add
           </Button>
         </Modal.Footer>
       </Modal>
 
-      {loadingCreate && <LoadingBox></LoadingBox>}
       {loadingDelete && <LoadingBox></LoadingBox>}
 
       {loading ? (
@@ -278,10 +291,11 @@ export default function ProductListScreen() {
         <MessageBox variant='danger'>{error}</MessageBox>
       ) : (
         <>
-          <table className='table'>
+          <table className='table text-center table-hover align-baseline'>
             <thead>
               <tr>
                 <th>ID</th>
+                <th>PHOTO</th>
                 <th>NAME</th>
                 <th>PRICE</th>
                 <th>CATEGORY</th>
@@ -293,6 +307,14 @@ export default function ProductListScreen() {
               {products.map((product) => (
                 <tr key={product._id}>
                   <td>{product._id}</td>
+                  <td>
+                    <img
+                      src={product.image}
+                      alt='product img'
+                      className='img-fluid'
+                      style={{ width: '3rem', borderRadius: '30px' }}
+                    />
+                  </td>
                   <td>{product.name}</td>
                   <td>{product.price}</td>
                   <td>{product.category}</td>
@@ -300,17 +322,19 @@ export default function ProductListScreen() {
                   <td>
                     <Button
                       type='button'
-                      variant='light'
+                      variant='warning'
                       onClick={() => navigate(`/admin/product/${product._id}`)}
                     >
+                      <i className='fa-solid fa-pencil me-2'></i>
                       Edit
                     </Button>
                     &nbsp;
                     <Button
                       type='button'
-                      variant='light'
+                      variant='danger'
                       onClick={() => deleteHandler(product)}
                     >
+                      <i className='fa-solid fa-trash-can me-2'></i>
                       Delete
                     </Button>
                   </td>
